@@ -1,0 +1,127 @@
+\documentclass[letterpaper, 11pt]{article}
+
+% Standard packages
+\usepackage{amsmath, amsthm, latexsym, amssymb, graphicx, color, mathtools, geometry}
+
+% Simplifies margin settings
+\usepackage{geometry}
+\geometry{margin=1in,headsep=.25in}
+
+% Puts list item indicators in bold; makes flush with previous margin
+\renewcommand\labelenumi{\bf\theenumi.}
+\renewcommand\labelenumii{\bf\theenumii.}
+\setlength\leftmargini{1.4em}
+\setlength\leftmarginii{1.4em}
+
+% Flexibility for headers and footers
+\usepackage{fancyhdr}
+\usepackage{datetime2}
+
+
+\pagestyle{fancyplain}
+\fancyhf{} %clear all header and footer fields
+\cfoot{\bf \small Page \thepage}
+\headsep 0.2in
+\thispagestyle{empty}
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    unicode=false,          % non-Latin characters in Acrobat's bookmarks
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=true,      % page fit to window when opened
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfnewwindow=true,      % links in new window
+    pdfkeywords={keywords}, % list of keywords
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=black,        % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=blue           % color of external links
+}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\parindent 0in
+\parskip 12pt
+
+\begin{document}
+
+\title{Homework Template}
+
+\begin{center}
+    {
+        \large
+        \bf
+        CS-E4850 Computer Vision\\
+        Exercise Round \#8\\
+        Submitted by Chen\ Xu, ID 000000\\
+        \today
+    }
+\end{center}
+\bigskip
+\textbf{Exercise 1. Face tracking example using KLT tracker.}\\
+Run the example as instructed below and answer the questions.
+
+a) Run Exercise8.ipynb
+
+b) Run Exercise8.ipynb with a different input by changing the input to obama.avi: \\frames=faceTracker('obama.avi')
+
+c) What could be the main reasons why most of the features are not tracked very long in case b) above?
+
+\textbf{Answer:} The frame rate is not high enough when the camera starts shaking.
+
+d) How could one try to avoid the problem of gradually losing the features? Suggest one or more improvements.
+
+\textbf{Answer:} Increase the frame rate.
+
+e) Voluntary task: Capture a video of your own face or of a picture of a face, and check that whether the tracking works for you. That is, replace the input video path in faceTrackingDemo.py with the path to your own video.
+
+\bigskip
+\textbf{Exercise 2. Kanade-Lucas-Tomasi (KLT) feature tracking.}
+\begin{proof}
+    \text{When the geometric warping \textbf{W} is a translation. \textbf{W} can be written as:}
+    \begin{align*}
+        \textbf{W}                                    & =
+        \begin{bmatrix}
+            x + p_1 \\
+            y + p_2
+        \end{bmatrix}                                    \\
+        \therefore
+        \frac{\partial\textbf{W}}{\partial\textbf{p}} & =
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+    \end{align*}
+    Equation (10) in the paper becomes:
+    \begin{align*}
+        \Delta\textbf{p} & = (\sum{[\nabla I \frac{\partial \textbf{W}}{\partial \textbf{p}}]^\top}[\nabla I \frac{\partial \textbf{W}}{\partial \textbf{p}}])^{-1} \sum{[\nabla I \frac{\partial \textbf{W}}{\partial \textbf{p}}]^\top[T(\textbf{x})-I(\textbf{W}(\textbf{x};\textbf{p}))]} \\
+                         & = (\sum{[\nabla I]^\top}[\nabla I])^{-1} \sum{[\nabla I]^\top[T(\textbf{x})-I(\textbf{W}(\textbf{x};\textbf{p}))]}                                                                                                                                                 \\
+                         & =
+        \begin{bmatrix}
+            \sum{I_x I_x} & \sum{I_x I_y} \\
+            \sum{I_x I_y} & \sum{I_y I_y}
+        \end{bmatrix}^{-1}
+        \sum{
+        \begin{bmatrix}
+            I_x \\
+            I_y
+        \end{bmatrix}
+        [-I_t]
+        }                                                                                                                                                                                                                                                                                     \\
+                         & =-
+        \begin{bmatrix}
+            \sum{I_x I_x} & \sum{I_x I_y} \\
+            \sum{I_x I_y} & \sum{I_y I_y}
+        \end{bmatrix}^{-1}
+        \begin{bmatrix}
+            \sum{I_x I_t} \\
+            \sum{I_y I_t}
+        \end{bmatrix}
+    \end{align*}
+\end{proof}
+
+\end{document}

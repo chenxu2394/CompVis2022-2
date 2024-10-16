@@ -1,0 +1,241 @@
+\documentclass[letterpaper, 11pt]{article}
+
+% Standard packages
+\usepackage{amsmath, amsthm, latexsym, amssymb, graphicx, color, mathtools, geometry}
+
+% Simplifies margin settings
+\usepackage{geometry}
+\geometry{margin=1in,headsep=.25in}
+
+% Puts list item indicators in bold; makes flush with previous margin
+\renewcommand\labelenumi{\bf\theenumi.}
+\renewcommand\labelenumii{\bf\theenumii.}
+\setlength\leftmargini{1.4em}
+\setlength\leftmarginii{1.4em}
+
+% Flexibility for headers and footers
+\usepackage{fancyhdr}
+\usepackage{datetime2}
+
+
+\pagestyle{fancyplain}
+\fancyhf{} %clear all header and footer fields
+\cfoot{\bf \small Page \thepage}
+\headsep 0.2in
+\thispagestyle{empty}
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    unicode=false,          % non-Latin characters in Acrobat's bookmarks
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=true,      % page fit to window when opened
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfnewwindow=true,      % links in new window
+    pdfkeywords={keywords}, % list of keywords
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=black,        % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=blue           % color of external links
+}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\parindent 0in
+\parskip 12pt
+
+\begin{document}
+
+\title{Homework Template}
+
+\begin{center}
+    {
+        \large
+        \bf
+        CS-E4850 Computer Vision\\
+        Exercise Round \#1\\
+        Submitted by Chen\ Xu, ID 000000\\
+        \today
+    }
+\end{center}
+
+\bigskip
+
+\textbf{Exercise 1. Homogeneous coordinates.}\\
+
+\textbf{Solution}\\
+
+a)
+\begin{proof}
+    The homogeneous coordinates of \textbf{x} is $(x\ y\ 1)^\top$, and $\textbf{l} = (a\ b\ c)^\top$,\\
+    therefore the left-hand side of $ax+by+c=0$ can be written as the inner product of \textbf{x} and \textbf{l}. Thus,
+    $$\textbf{x}.\textbf{l}=\textbf{x}^\top\textbf{l}=0$$
+\end{proof}
+
+b)
+\begin{proof}
+    $\because$ $\textbf{l}.(\textbf{l}\times\textbf{l}')=0$\\
+    $\therefore$ the point $\textbf{x}=\textbf{l}\times\textbf{l}'$ is on the line \textbf{l}.\\
+    Similarly, $\because$ $\textbf{l}'.(\textbf{l}\times\textbf{l})'=0$, \\
+    $\therefore$ the point $\textbf{x}$ is on the line $\textbf{l}'$.\\
+    The point \textbf{x} is on both \textbf{l} and $\textbf{l}'$, which means \textbf{x} is the intersection of \textbf{l} and $\textbf{l}'$.
+\end{proof}
+
+c)
+\begin{proof}
+    $\because$ $\textbf{x}.(\textbf{x}\times\textbf{x}')=0$\\
+    $\therefore$ the line $\textbf{l}=\textbf{x}\times\textbf{x}'$ is through the point \textbf{x}.\\
+    Similarly, $\because$ $\textbf{x}'.(\textbf{x}\times\textbf{x})'=0$, \\
+    $\therefore$ the line $\textbf{l}$ is through the point $\textbf{x}'$.\\
+    The point line \textbf{l} is through both points \textbf{x} and $\textbf{x}'$.
+\end{proof}
+
+d)
+\begin{proof}
+    From c), the line through both \textbf{x} and $\textbf{x}'$ can be written as $\textbf{l}=\textbf{x}\times\textbf{x}'$.\\
+    $\because$ $\textbf{y}.\textbf{l} = (\alpha\textbf{x}+(1-\alpha)\textbf{x}').(\textbf{x}\times\textbf{x}')=\alpha\textbf{x}.(\textbf{x}\times\textbf{x}')+(1-\alpha)\textbf{x}'.(\textbf{x}\times\textbf{x}')=0$\\
+    $\therefore$ the point $\textbf{y}=\alpha\textbf{x}+(1-\alpha)\textbf{x}'$ lies on the line \textbf{l}, which is through both points \textbf{x} and $\textbf{x}'$.
+
+\end{proof}
+
+\textbf{Exercise 2. Transformations in 2D.}\\
+a) Use homogeneous coordinates and give the matrix representations of the following
+transformation groups: translation, Euclidean transformation (rotation+translation),
+similarity transformation (scaling+rotation+translation), affine transformation, projective transformation.\\
+\begin{itemize}
+    \item Translation:
+          $$\begin{bmatrix}
+                  1 & 0 & t_x \\
+                  0 & 1 & t_y \\
+                  0 & 0 & 1
+              \end{bmatrix}$$
+    \item Euclidean transformation (rotation+translation):
+          $$\begin{bmatrix}
+                  cos\theta & -sin\theta & t_x \\
+                  sin\theta & cos\theta  & t_y \\
+                  0         & 0          & 1
+              \end{bmatrix}$$
+    \item Similarity transformation (scaling+rotation+translation):
+          $$\begin{bmatrix}
+                  s\ cos\theta & -s\ sin\theta & t_x \\
+                  s\ sin\theta & s\ cos\theta  & t_y \\
+                  0            & 0             & 1
+              \end{bmatrix}$$
+    \item Affine transformation:
+          $$\begin{bmatrix}
+                  a_{11} & a_{12} & t_x \\
+                  a_{21} & a_{22} & t_y \\
+                  0      & 0      & 1
+              \end{bmatrix}$$
+    \item Projective transformation:
+          $$\begin{bmatrix}
+                  h_{11} & h_{12} & h_{13} \\
+                  h_{21} & h_{22} & h_{23} \\
+                  h_{31} & h_{32} & h_{33} \\
+              \end{bmatrix}$$
+\end{itemize}
+b) What is the number of degrees of freedom in these transformations?
+\begin{itemize}
+    \item Translation:
+          $2$
+    \item Euclidean transformation (rotation+translation):
+          $3$
+    \item Similarity transformation (scaling+rotation+translation):
+          $4$
+    \item Affine transformation:
+          $6$
+    \item Projective transformation:
+          $8$
+\end{itemize}
+c) Why is the number of degrees of freedom in a projective transformation less than the
+number of elements in a 3 × 3 matrix?
+
+The matrix $\begin{pmatrix}
+        h_{11} & h_{12} & h_{13} \\
+        h_{21} & h_{22} & h_{23} \\
+        h_{31} & h_{32} & h_{33} \\
+    \end{pmatrix}$
+has 9 elements, but only their ratio matters, so the perspective transformation can be determined by 8 elements.
+
+
+\textbf{Exercise 3. Planar projective transformation.}\\
+
+\textbf{Solution}\\
+
+a)
+\begin{align*}
+     & \textbf{l}^\top\textbf{x}=0                                                                    \\
+     & \Rightarrow \textbf{l}^\top\textbf{H}^{-1}\textbf{H}\textbf{x}=0                               \\
+     & \Rightarrow \textbf{l}^\top\textbf{H}^{-1}\textbf{x}'=0                                        \\
+     & \therefore \textbf{l}'^\top = \textbf{l}^\top\textbf{H}^{-1}                                   \\
+     & \Rightarrow \textbf{l}' = (\textbf{l}^\top\textbf{H}^{-1})^\top = \textbf{H}^{-\top}\textbf{l}
+\end{align*}
+
+b)
+\begin{proof}
+    Since $\pmb{x}_{1}$ and $\pmb{x}_{2}$ are not lying on the lines $\pmb{l}_{1}$ or $\pmb{l}_{2}$,
+    Therefore:
+    $$
+        \pmb{l}_{i}^\top \pmb{x}_{j} \neq 0\ \forall i, j \in \{1, 2\}
+    $$
+
+    \begin{align*}
+        I & = \frac{(\pmb{l}_{1}^\top \pmb{x}_{1})(\pmb{l}_{2}^\top \pmb{x}_{2})}{(\pmb{l}_{1}^\top \pmb{x}_{2})(\pmb{l}_{2}^\top \pmb{x}_{1})}                                                                                                     \\
+          & = \frac{(\pmb{l}_{1}^\top \textbf{H}^{-1}\textbf{H}\pmb{x}_{1})(\pmb{l}_{2}^\top \textbf{H}^{-1}\textbf{H}\pmb{x}_{2})}{(\pmb{l}_{1}^\top \textbf{H}^{-1}\textbf{H}\pmb{x}_{2})(\pmb{l}_{2}^\top \textbf{H}^{-1}\textbf{H}\pmb{x}_{1})} \\
+          & = \frac{(\pmb{l}_{1}'^\top \pmb{x}_{1}')(\pmb{l}_{2}'^\top \pmb{x}_{2}')}{(\pmb{l}_{1}'^\top \pmb{x}_{2}')(\pmb{l}_{2}'^\top \pmb{x}_{1}')} = I'                                                                                        \\
+    \end{align*}
+    $\therefore$ $I$ is invariant under projective transformation.
+\end{proof}
+
+Why similar construction does not give projective invariants with fewer number of points
+or lines?
+
+\textbf{Solution}
+
+If there are fewer number of lines (1 line) and $I$ is constructed in such a way:
+$$
+    I = \frac{(\pmb{l}_{1}^\top \pmb{x}_{1})}{(\pmb{l}_{1}^\top \pmb{x}_{2})}
+$$
+Consider scaling $\pmb{x}_{1}$ by $\alpha$, $\pmb{x}_{2}$ by $\beta$, and $\pmb{l}_{1}$ by $\gamma$.
+\begin{align*}
+    \widetilde{I} & = \frac{(\gamma\pmb{l}_{1}^\top\alpha \pmb{x}_{1})}{(\gamma\pmb{l}_{1}^\top \beta\pmb{x}_{2})} \\
+                  & = \frac{\alpha(\pmb{l}_{1}^\top \pmb{x}_{1})}{\beta(\pmb{l}_{1}^\top \pmb{x}_{2})} \neq I      \\
+\end{align*}
+which means $I$ is not invariant. Similarly, $I$ won't be invariant either if there are fewer number of points (one point).
+
+
+
+%\begin{align*}
+%& I'=\frac{n!}{k!(n-k)!}\\
+%& \Rightarrow \textbf{l}^\top\textbf{H}^{-1}\textbf{H}\textbf{x}=0\\
+%& \Rightarrow \textbf{l}^\top\textbf{H}^{-1}\textbf{x}'=0\\
+%& \therefore \textbf{l}'^\top = \textbf{l}^\top\textbf{H}^{-1}\\
+%& \Rightarrow \textbf{l}' = (\textbf{l}^\top\textbf{H}^{-1})^\top = \textbf{H}^{-\top}\textbf{l}
+%\end{align*}
+
+
+
+
+%Use exponential notation to show that
+%\begin{itemize}
+%\item $(1+i)^3 = -2-2i$.
+%\item $2i(\sqrt{3}+i)(1+i\sqrt{3})=-8$
+%\end{itemize}
+
+%\textbf{Solution}\\
+%By direct computation we observe that
+%\begin{align*}
+%(1+i)^3 &= xxx\\
+%		&= yyy\\
+%        & \vdotswithin{=} \text{ blah, blah, blah}\\
+%        &= -2-2i.
+%\end{align*}
+
+%Proceeding to the second part, we compute
+
+%etc.
+
+\end{document}

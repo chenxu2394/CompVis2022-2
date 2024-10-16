@@ -1,0 +1,355 @@
+\documentclass[letterpaper, 11pt]{article}
+
+% Standard packages
+\usepackage{amsmath, amsthm, latexsym, amssymb, graphicx, color, mathtools, geometry}
+
+% Simplifies margin settings
+\usepackage{geometry}
+\geometry{margin=1in,headsep=.25in}
+
+% Puts list item indicators in bold; makes flush with previous margin
+\renewcommand\labelenumi{\bf\theenumi.}
+\renewcommand\labelenumii{\bf\theenumii.}
+\setlength\leftmargini{1.4em}
+\setlength\leftmarginii{1.4em}
+
+% Flexibility for headers and footers
+\usepackage{fancyhdr}
+\usepackage{datetime2}
+
+
+\pagestyle{fancyplain}
+\fancyhf{} %clear all header and footer fields
+\cfoot{\bf \small Page \thepage}
+\headsep 0.2in
+\thispagestyle{empty}
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    unicode=false,          % non-Latin characters in Acrobat's bookmarks
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=true,      % page fit to window when opened
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfnewwindow=true,      % links in new window
+    pdfkeywords={keywords}, % list of keywords
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=black,        % color of internal links
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=blue           % color of external links
+}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\parindent 0in
+\parskip 12pt
+
+\begin{document}
+
+\title{Homework Template}
+
+\begin{center}
+    {
+        \large
+        \bf
+        CS-E4850 Computer Vision\\
+        Exercise Round \#6\\
+        Submitted by Chen\ Xu, ID 000000\\
+        \today
+    }
+\end{center}
+
+\bigskip
+
+\textbf{Exercise 1. Least-squares fitting for affine transformations.}\\
+a)
+\textbf{Solution}\\
+\begin{align*}
+    E & =\sum_{i=1}^{n}
+    \begin{Vmatrix}
+        \textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t} \\
+    \end{Vmatrix}^2                                 \\
+      & =\sum_{i=1}^{n}
+    \begin{Vmatrix}
+        \begin{bmatrix}
+            x'_i \\
+            y'_i \\
+        \end{bmatrix}
+        -
+        \begin{bmatrix}
+            m_1 & m_2 \\
+            m_3 & m_4 \\
+        \end{bmatrix}
+        \begin{bmatrix}
+            x_i \\
+            y_i \\
+        \end{bmatrix}
+        -
+        \begin{bmatrix}
+            t_1 \\
+            t_2 \\
+        \end{bmatrix}
+    \end{Vmatrix}^2                                                        \\
+      & =\sum_{i=1}^{n}
+    \begin{Vmatrix}
+        \begin{bmatrix}
+            x'_i-m_1 x_i-m_2 y_i-t_1 \\
+            y'_i-m_3 x_i-m_4 y_i-t_2 \\
+        \end{bmatrix}
+    \end{Vmatrix}^2                                                        \\
+      & =\sum_{i=1}^{n} ((m_1 x_i+m_2 y_i+t_1-x'_i)^2+(m_3 x_i+m_4 y_i+t_2-y'_i)^2)
+\end{align*}
+
+\begin{align*}
+    \frac{\partial E}{\partial m_1} & =\frac{\partial}{\partial m_1}\sum_{i=1}^{n} ((m_1 x_i+m_2 y_i+t_1-x'_i)^2+(m_3 x_i+m_4 y_i+t_2-y'_i)^2) \\
+                                    & =2\sum_{i=1}^{n}x_i(m_1 x_i+m_2 y_i+t_1-x'_i)                                                            \\
+    \frac{\partial E}{\partial m_2} & =2\sum_{i=1}^{n}y_i(m_1 x_i+m_2 y_i+t_1-x'_i)                                                            \\
+    \frac{\partial E}{\partial m_3} & =2\sum_{i=1}^{n}x_i(m_3 x_i+m_4 y_i+t_2-y'_i)                                                            \\
+    \frac{\partial E}{\partial m_4} & =2\sum_{i=1}^{n}y_i(m_3 x_i+m_4 y_i+t_2-y'_i)                                                            \\
+    \frac{\partial E}{\partial t_1} & =2\sum_{i=1}^{n}(m_1 x_i+m_2 y_i+t_1-x'_i)                                                               \\
+    \frac{\partial E}{\partial t_2} & =2\sum_{i=1}^{n}(m_3 x_i+m_4 y_i+t_2-y'_i)                                                               \\
+\end{align*}
+\newpage
+b)
+\begin{proof}
+    By setting above gradients to zero, one can get:\\
+    \begin{align*}
+        \begin{bmatrix}
+                &     & \ldots               \\
+            x_i & y_i & 0      & 0   & 1 & 0 \\
+            0   & 0   & x_i    & y_i & 0 & 1 \\
+                &     & \ldots               \\
+        \end{bmatrix}
+        \begin{bmatrix}
+            m_1 \\
+            m_2 \\
+            m_3 \\
+            m_4 \\
+            t_1 \\
+            t_2 \\
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            \ldots \\
+            x'_i   \\
+            y'_i   \\
+            \ldots \\
+        \end{bmatrix}
+    \end{align*}
+    And this is corresponding to the equation:
+    $$\textbf{S}\textbf{h}=\textbf{u}$$
+\end{proof}
+c)\\
+\textbf{Solution}\\
+From b)
+\begin{align}
+    \textbf{h} = \textbf{S}^{-1} \textbf{u} \label{eq:1}
+\end{align}
+Transformation from the following points correspondences $\{(0,0)\rightarrow(1,2)\},
+    \{(1,0)\rightarrow(3,2)\},\{(0,1)\rightarrow(1,4)\}$.
+Equation\eqref{eq:1} becomes:
+\begin{align*}
+    \begin{bmatrix}
+        m_1 \\
+        m_2 \\
+        m_3 \\
+        m_4 \\
+        t_1 \\
+        t_2 \\
+    \end{bmatrix}
+     & =
+    \begin{bmatrix}
+        x_1 & y_1 & 0   & 0   & 1 & 0 \\
+        0   & 0   & x_1 & y_1 & 0 & 1 \\
+        x_2 & y_2 & 0   & 0   & 1 & 0 \\
+        0   & 0   & x_2 & y_2 & 0 & 1 \\
+        x_3 & y_3 & 0   & 0   & 1 & 0 \\
+        0   & 0   & x_3 & y_3 & 0 & 1 \\
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+        x'_1 \\
+        y'_1 \\
+        x'_2 \\
+        y'_2 \\
+        x'_3 \\
+        y'_3 \\
+    \end{bmatrix} \\
+     & =
+    \begin{bmatrix}
+        0 & 0 & 0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 0 & 0 & 1 \\
+        1 & 0 & 0 & 0 & 1 & 0 \\
+        0 & 0 & 1 & 0 & 0 & 1 \\
+        0 & 1 & 0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1 & 0 & 1 \\
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+        1 \\
+        2 \\
+        3 \\
+        2 \\
+        1 \\
+        4 \\
+    \end{bmatrix} \\
+     & =
+    \begin{bmatrix}
+        2 \\
+        0 \\
+        0 \\
+        2 \\
+        1 \\
+        2 \\
+    \end{bmatrix} \\
+\end{align*}
+%\begin{align*}
+%    \frac{\partial E}{\partial \textbf{M}} &= \frac{\partial}{\partial\textbf{M}}\sum_{i=1}^{n} ||\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t}||^2\\
+%    &= \frac{\partial}{\partial\textbf{M}}\sum_{i=1}^{n} (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})^\top (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\frac{\partial}{\partial\textbf{M}}\sum_{i=1}^{n} (\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top}-\textbf{t}^{\top}) (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\sum_{i=1}^{n} \frac{\partial}{\partial\textbf{M}}(\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top}-\textbf{t}^{\top}) (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\sum_{i=1}^{n} \frac{\partial}{\partial\textbf{M}}(\textbf{x}_i^{\top}\textbf{M}^{\top}\textbf{M}\textbf{x}_i-(\textbf{x}_i^{'\top}-\textbf{t}^\top)\textbf{M}\textbf{x}_i-\textbf{x}_i^{\top}\textbf{M}^{\top}(\textbf{x}'_i-\textbf{t}))\\
+%    &=\sum_{i=1}^{n} 2(\textbf{x}_i^{\top}\textbf{M}^{\top}\textbf{x}_i-(\textbf{x}_i^{'\top}-\textbf{t}^\top)\textbf{x}_i)\\
+%    &=2\sum_{i=1}^{n} (\textbf{x}_i^{\top}\textbf{M}^{\top}\textbf{x}_i-\textbf{x}_i^{'\top}\textbf{x}_i+\textbf{t}^\top\textbf{x}_i)\\
+%\end{align*}
+%\begin{align*}
+%    \frac{\partial E}{\partial \textbf{t}} &= \frac{\partial}{\partial\textbf{t}}\sum_{i=1}^{n} ||\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t}||^2\\
+%    &=\frac{\partial}{\partial\textbf{t}}\sum_{i=1}^{n} (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})^\top (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\frac{\partial}{\partial\textbf{t}}\sum_{i=1}^{n} (\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top}-\textbf{t}^{\top}) (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\sum_{i=1}^{n} \frac{\partial}{\partial\textbf{t}}(\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top}-\textbf{t}^{\top}) (\textbf{x}'_i-\textbf{M}\textbf{x}_i-\textbf{t})\\
+%    &=\sum_{i=1}^{n} \frac{\partial}{\partial\textbf{t}}(\textbf{t}^\top\textbf{t}-(\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top})\textbf{t}-\textbf{t}^\top(\textbf{x}'_i-\textbf{M}\textbf{x}_i))\\
+%    &=\sum_{i=1}^{n} (2\textbf{t}^\top-2(\textbf{x}_i^{'\top}-\textbf{x}_i^{\top}\textbf{M}^{\top}))\\
+%    &=2\sum_{i=1}^{n} (\textbf{t}^\top-\textbf{x}_i^{'\top}+\textbf{x}_i^{\top}\textbf{M}^{\top})\\
+%\end{align*}
+\textbf{Exercise 2. Similarity transformation from two point correspondences.}\\
+a)\\
+\textbf{Solution}
+\begin{align}
+    \textbf{v}'                & = \textbf{x}'_2 - \textbf{x}'_1\nonumber                                \\
+                               & = {s}\textbf{R}\textbf{x}_2 + \textbf{t} -
+    {s}\textbf{R}\textbf{x}_1 - \textbf{t}\nonumber                                                      \\
+                               & ={s}\textbf{R}(\textbf{x}_2-\textbf{x}_1)                               \\
+    \nonumber                                                                                            \\
+    \textbf{v}                 & = \textbf{x}_2 - \textbf{x}_1                                           \\
+    \therefore \textbf{v}'     & = s\textbf{R}\textbf{v}                                                 \\
+    \begin{bmatrix}
+        v'_x \\
+        v'_y
+    \end{bmatrix}
+                               & =
+    s
+    \begin{bmatrix}
+        cos\theta & -sin\theta \\
+        sin\theta & cos\theta
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_x \\
+        v_y
+    \end{bmatrix}\nonumber                                                                               \\
+    v'_x                       & =s(cos\theta v_x - sin\theta v_y)\label{eq:5}                           \\
+    v'_y                       & =s(sin\theta v_x + cos\theta v_y)    \label{eq:6}                       \\
+    \intertext{From \eqref{eq:5}\eqref{eq:6}}\nonumber                                                   \\
+    v'_x v_x + v'_y v_y        & = s(v_x^2+v_y^2)                                                        \\
+    (v_x^{'2}+v_y^{'2})        & =s^2(v_x^2+v_y^2)                                                       \\
+    \textbf{v}'\cdot\textbf{v} & = s |\textbf{v}|^2 cos\theta                                            \\
+    |\textbf{v}'|              & =s|\textbf{v}|\label{eq:10}                                             \\
+    \therefore cos\theta       & = \frac{\textbf{v}'\cdot\textbf{v}}{|\textbf{v}'||\textbf{v}|}\nonumber \\
+    \theta                     & = arccos(\frac{\textbf{v}'\cdot\textbf{v}}{|\textbf{v}'||\textbf{v}|})
+\end{align}
+
+b)
+\begin{proof}
+    From \eqref{eq:10} above in a):
+    \begin{align*}
+        |\textbf{v}'| & =s|\textbf{v}|                       \\
+        s             & = \frac{|\textbf{v}'|}{|\textbf{v}|}
+    \end{align*}
+
+\end{proof}
+
+c)
+\textbf{Solution}\\
+\begin{align*}
+    \textbf{t} & = \textbf{x}' - s\textbf{R}\textbf{x} \\
+    \begin{bmatrix}
+        t_x \\
+        t_y
+    \end{bmatrix}
+               & =
+    \begin{bmatrix}
+        x' \\
+        y'
+    \end{bmatrix}
+    -s
+    \begin{bmatrix}
+        cos\theta & -sin\theta \\
+        sin\theta & cos\theta
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix}                                     \\
+               & =
+    \begin{bmatrix}
+        x' - s(x cos\theta - y sin\theta) \\
+        y' - s(x sin\theta + y cos\theta)
+    \end{bmatrix}
+\end{align*}
+
+d)\\
+\textbf{Solution}\\
+Transformation from the following points correspondences $\{(1/2,0)\rightarrow(0,0)\},
+    \{(0,1/2)\rightarrow(-1,-1)\}$.
+\begin{align*}
+    \textbf{v}'           & =
+    \begin{bmatrix}
+        -1 \\
+        -1
+    \end{bmatrix}                                                                                           \\
+    \textbf{v}            & =
+    \begin{bmatrix}
+        -1/2 \\
+        1/2
+    \end{bmatrix}                                                                                           \\
+    \theta                & = arccos(\frac{\textbf{v}'\cdot\textbf{v}}{|\textbf{v}'||\textbf{v}|})=arccos(0) \\
+    \theta                & =\pi/2                                                                           \\
+    \therefore \textbf{R} & =
+    \begin{bmatrix}
+        cos\theta & -sin\theta \\
+        sin\theta & cos\theta
+    \end{bmatrix}                                                                                   \\
+                          & =
+    \begin{bmatrix}
+        0 & -1 \\
+        1 & 0
+    \end{bmatrix}                                                                                           \\
+    \intertext{And}                                                                                          \\
+    s                     & = \frac{|\textbf{v}'|}{|\textbf{v}|} = 2                                         \\
+    \begin{bmatrix}
+        t_x \\
+        t_y
+    \end{bmatrix}
+                          & =
+    \begin{bmatrix}
+        x' - s(x cos\theta - y sin\theta) \\
+        y' - s(x sin\theta + y cos\theta)
+    \end{bmatrix}                                                                        \\
+                          & =
+    \begin{bmatrix}
+        x' + sy \\
+        y' - sx
+    \end{bmatrix}                                                                                           \\
+                          & =
+    \begin{bmatrix}
+        0 + 2 * 0 \\
+        0 - 2 * 1/2
+    \end{bmatrix}                                                                                           \\
+                          & =
+    \begin{bmatrix}
+        0 \\
+        -1
+    \end{bmatrix}
+\end{align*}
+
+\end{document}
